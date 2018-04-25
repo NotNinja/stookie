@@ -24,10 +24,22 @@
 
 // TODO
 
-const assert = require('assert');
+const autoTypes = [ 'Array', 'Error', 'Function', 'RegExp', 'String' ];
+const checkType = {
+  isArray: Array.isArray,
+  isBoolean: (value) => value === false || value === true,
+  isObject: (value) => value !== null && typeof value === 'object',
+  /* eslint-disable no-void */
+  isUndefined: (value) => value === void 0
+  /* eslint-enable no-void */
+};
 
-const type = require('../../src/util/type');
+autoTypes.forEach((name) => {
+  const methodName = `is${name}`;
 
-describe('util/type', () => {
-  // TODO
+  if (!checkType[methodName]) {
+    checkType[methodName] = (value) => Object.prototype.toString.call(value) === `[object ${name}]`;
+  }
 });
+
+module.exports = checkType;

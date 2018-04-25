@@ -26,9 +26,9 @@
 
 const AnySchema = require('./any-schema');
 const createError = require('../error/create');
+const checkType = require('../util/check-type');
 const forOwn = require('../util/for-own');
 const hasOwn = require('../util/has-own');
-const { isObject } = require('../util/type');
 const mapOwn = require('../util/map-own');
 
 class ObjectSchema extends AnySchema {
@@ -113,7 +113,7 @@ class ObjectSchema extends AnySchema {
   }
 
   _validate(value, state, options) {
-    if (!isObject(value)) {
+    if (!checkType.isObject(value)) {
       // TODO
       throw createError('', state);
     }

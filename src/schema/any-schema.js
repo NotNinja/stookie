@@ -25,7 +25,7 @@
 // TODO
 
 const createError = require('../error/create');
-const { isArray, isBoolean, isError, isFunction, isRegExp, isString, isUndefined } = require('../util/type');
+const checkType = require('../util/check-type');
 
 class AnySchema {
 
@@ -48,12 +48,12 @@ class AnySchema {
   }
 
   cast(casters) {
-    if (!isUndefined(casters)) {
-      casters = isArray(casters) ? casters : [ casters ];
+    if (!checkType.isUndefined(casters)) {
+      casters = checkType.isArray(casters) ? casters : [ casters ];
     }
 
     casters.forEach((caster, index) => {
-      if (isFunction(caster)) {
+      if (checkType.isFunction(caster)) {
         this._casters.push(caster);
       } else {
         throw new Error(`Invalid caster at index: ${index}`);
@@ -79,11 +79,11 @@ class AnySchema {
     state = state || { key: '', parent: null, path: [] };
     options = options || {};
 
-    if (isUndefined(value)) {
+    if (checkType.isUndefined(value)) {
       if (this._isRequired) {
         // TODO
         throw createError('', state);
-      } else if (isFunction(this._defaultSupplier)) {
+      } else if (checkType.isFunction(this._defaultSupplier)) {
         value = this._defaultSupplier();
       }
     }
@@ -92,25 +92,25 @@ class AnySchema {
   }
 
   required(isRequired) {
-    this._isRequired = isUndefined(isRequired) ? true : Boolean(isRequired);
+    this._isRequired = checkType.isUndefined(isRequired) ? true : Boolean(isRequired);
 
     return this;
   }
 
   strict(isStrict) {
-    this._isStrict = isUndefined(isStrict) ? true : Boolean(isStrict);
+    this._isStrict = checkType.isUndefined(isStrict) ? true : Boolean(isStrict);
 
     return this;
   }
 
   valid(validators) {
-    if (!isUndefined(validators)) {
-      validators = isArray(validators) ? validators : [ validators ];
+    if (!checkType.isUndefined(validators)) {
+      validators = checkType.isArray(validators) ? validators : [ validators ];
     }
 
     validators.forEach((validator, index) => {
       validator = parseValidator(validator);
-      if (!isFunction(validator)) {
+      if (!checkType.isFunction(validator)) {
         throw new Error(`Invalid validator at index: ${index}`);
       }
 
@@ -141,14 +141,14 @@ class AnySchema {
 }
 
 function checkValidation(result, state, index) {
-  if (isBoolean(result)) {
+  if (checkType.isBoolean(result)) {
     if (!result) {
       // TODO
       throw createError('', state);
     }
-  } else if (isError(result)) {
+  } else if (checkType.isError(result)) {
     throw result;
-  } else if (isString(result)) {
+  } else if (checkType.isString(result)) {
     throw createError(result, state);
   } else {
     throw new Error(`Invalid validation result at index ${index}`);
@@ -157,7 +157,7 @@ function checkValidation(result, state, index) {
 
 function createRegExpValidator(regex) {
   return (value) => {
-    if (!isString(value)) {
+    if (!checkType.isString(value)) {
       // TODO
       return '';
     }
@@ -168,10 +168,10 @@ function createRegExpValidator(regex) {
 }
 
 function parseValidator(validator) {
-  if (isString(validator)) {
+  if (checkType.isString(validator)) {
     validator = createRegExpValidator(new RegExp(validator));
   }
-  if (isRegExp(validator)) {
+  if (checkType.isRegExp(validator)) {
     validator = createRegExpValidator(validator);
   }
 

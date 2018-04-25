@@ -26,7 +26,7 @@
 
 const AnySchema = require('./any-schema');
 const createError = require('../error/create');
-const { isArray, isUndefined } = require('../util/type');
+const checkType = require('../util/check-type');
 
 class ArraySchema extends AnySchema {
 
@@ -47,8 +47,8 @@ class ArraySchema extends AnySchema {
   }
 
   items(schemas) {
-    if (!isUndefined(schemas)) {
-      schemas = isArray(schemas) ? schemas : [ schemas ];
+    if (!checkType.isUndefined(schemas)) {
+      schemas = checkType.isArray(schemas) ? schemas : [ schemas ];
     }
 
     if (!this._childrenSchemas) {
@@ -114,7 +114,7 @@ class ArraySchema extends AnySchema {
   }
 
   _validate(value, state, options) {
-    if (!isArray(value)) {
+    if (!checkType.isArray(value)) {
       // TODO
       throw createError('', state);
     }

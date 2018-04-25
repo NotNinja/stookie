@@ -24,22 +24,10 @@
 
 // TODO
 
-const autoTypes = [ 'Array', 'Error', 'Function', 'RegExp', 'String' ];
-const typeCheckers = {
-  isArray: Array.isArray,
-  isBoolean: (value) => value === false || value === true,
-  isObject: (value) => value !== null && typeof value === 'object',
-  /* eslint-disable no-void */
-  isUndefined: (value) => value === void 0
-  /* eslint-enable no-void */
-};
+const assert = require('assert');
 
-autoTypes.forEach((name) => {
-  const methodName = `is${name}`;
+const checkType = require('../../src/util/check-type');
 
-  if (!typeCheckers[methodName]) {
-    typeCheckers[methodName] = (value) => Object.prototype.toString.call(value) === `[object ${name}]`;
-  }
+describe('util/check-type', () => {
+  // TODO
 });
-
-module.exports = typeCheckers;
