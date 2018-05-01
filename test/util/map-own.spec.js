@@ -22,12 +22,113 @@
 
 'use strict';
 
-// TODO
-
 const assert = require('assert');
+const sinon = require('sinon');
 
 const mapOwn = require('../../src/util/map-own');
 
 describe('util/map-own', () => {
-  // TODO
+  let callback;
+
+  beforeEach(() => {
+    callback = sinon.spy((value, key) => `Updated value for "${key}" from "${value}"`);
+  });
+
+  context('when obj has inherited and own properties', () => {
+    it('should only invoke callback and map each own property', () => {
+      class TestType {
+
+        constructor() {
+          this.foo = 'bar';
+          this.fu = 'baz';
+        }
+
+        get fizz() {
+          return 'buzz';
+        }
+
+      }
+
+      const value = new TestType();
+
+      const result = mapOwn(value, callback);
+
+      assert.deepStrictEqual(result, {
+        foo: 'Updated value for "foo" from "bar"',
+        fu: 'Updated value for "fu" from "baz"'
+      }, 'Returns object with mapped own properties');
+
+      assert.equal(callback.callCount, 2, 'Invoked callback for each own property');
+      assert.ok(callback.calledWithExactly('bar', 'foo', value), 'Invoked callback for "foo" own property');
+      assert.ok(callback.calledWithExactly('baz', 'fu', value), 'Invoked callback for "fu" own property');
+    });
+  });
+
+  context('when obj has no properties', () => {
+    it('should never invoke callback and return empty object', () => {
+      const result = mapOwn({}, callback);
+
+      assert.deepEqual(result, {}, 'Returns empty object');
+
+      assert.equal(callback.callCount, 0, 'Never invoked callback');
+    });
+  });
+
+  context('when obj has only inherited properties', () => {
+    it('should never invoke callback and return empty object', () => {
+      class TestType {
+
+        get foo() {
+          return 'bar';
+        }
+
+        get fu() {
+          return 'baz';
+        }
+
+      }
+
+      const result = mapOwn(new TestType(), callback);
+
+      assert.deepEqual(result, {}, 'Returns empty object');
+
+      assert.equal(callback.callCount, 0, 'Never invoked callback');
+    });
+  });
+
+  context('when obj has only own properties', () => {
+    it('should invoke callback and map each own property', () => {
+      class TestType {
+
+        constructor() {
+          this.foo = 'bar';
+          this.fu = 'baz';
+        }
+
+      }
+
+      const value = new TestType();
+
+      const result = mapOwn(value, callback);
+
+      assert.deepStrictEqual(result, {
+        foo: 'Updated value for "foo" from "bar"',
+        fu: 'Updated value for "fu" from "baz"'
+      }, 'Returns object with mapped own properties');
+
+      assert.equal(callback.callCount, 2, 'Invoked callback for each own property');
+      assert.ok(callback.calledWithExactly('bar', 'foo', value), 'Invoked callback for "foo" own property');
+      assert.ok(callback.calledWithExactly('baz', 'fu', value), 'Invoked callback for "fu" own property');
+    });
+  });
+
+  context('when obj is null', () => {
+    it('should never invoke callback and return empty object', () => {
+      const result = mapOwn(null, callback);
+
+      assert.deepEqual(result, {}, 'Returns empty object');
+
+      assert.equal(callback.callCount, 0, 'Never invoked callback');
+    });
+  });
 });
