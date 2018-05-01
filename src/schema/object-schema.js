@@ -26,7 +26,10 @@
 
 const AnySchema = require('./any-schema');
 const createError = require('../error/create');
+const checkSchema = require('../util/check-schema');
 const checkType = require('../util/check-type');
+const clone = require('../util/clone');
+const constant = require('../util/constant');
 const forOwn = require('../util/for-own');
 const hasOwn = require('../util/has-own');
 const mapOwn = require('../util/map-own');
@@ -34,37 +37,51 @@ const mapOwn = require('../util/map-own');
 class ObjectSchema extends AnySchema {
 
   all(schema) {
-    this._childSchema = ObjectSchema.check(schema);
+    const that = this.clone();
 
-    return this;
+    that._childSchema = checkSchema(schema);
+
+    return that;
+  }
+
+  clone() {
+    const that = super.clone();
+    that._childSchema = this._childSchema;
+    that._childrenSchemas = clone(this._childrenSchemas);
+
+    return that;
   }
 
   prop(key, schema) {
-    if (!this._childrenSchemas) {
-      this._childrenSchemas = {};
+    const that = this.clone();
+
+    if (!that._childrenSchemas) {
+      that._childrenSchemas = {};
     }
 
-    this._childrenSchemas[key] = ObjectSchema.check(schema, key);
+    that._childrenSchemas[key] = checkSchema(schema, key);
 
-    return this;
+    return that;
   }
 
   props(schemas) {
-    if (!this._childrenSchemas) {
-      this._childrenSchemas = {};
+    const that = this.clone();
+
+    if (!that._childrenSchemas) {
+      that._childrenSchemas = {};
     }
 
     forOwn(schemas, (schema, key) => {
-      this._childrenSchemas[key] = ObjectSchema.check(schema, key);
+      that._childrenSchemas[key] = checkSchema(schema, key);
     });
 
-    return this;
+    return that;
   }
 
   _process(value, state, options) {
     this._validate(value, state, options);
 
-    const schemaProps = mapOwn(this._childrenSchemas, () => false);
+    const schemaProps = mapOwn(this._childrenSchemas, constant(false));
 
     value = mapOwn(value, (prop, key) => {
       let schema;

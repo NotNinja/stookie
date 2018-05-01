@@ -22,8 +22,18 @@
 
 'use strict';
 
-// TODO
-
+/**
+ * Returns whether the specified <code>obj</code> has a property with the <code>name</code> provided as a own (not
+ * inherited) property.
+ *
+ * This is a convenient shorthand for {@link Object#hasOwnProperty} with additional <code>null</code> safety.
+ *
+ * @param {?Object} obj - the object to be checked
+ * @param {string} name - the name of the property to be checked
+ * @return {boolean} <code>true</code> if <code>obj</code> is not <code>null</code> and has a own property with
+ * <code>name</code>; otherwise <code>false</code>.
+ * @public
+ */
 function hasOwn(obj, name) {
   return obj != null && Object.prototype.hasOwnProperty.call(obj, name);
 }

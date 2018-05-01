@@ -22,32 +22,25 @@
 
 'use strict';
 
-// TODO
+/**
+ * Ensures that the specified <code>value</code> is a stookie schema and throws an error if it's not.
+ *
+ * Optionally, <code>key</code> can be provided to enhance any error messages that may be thrown.
+ *
+ * @param {*} value - the value to be checked
+ * @param {string} [key] - the key associated with <code>value</code>, where applicable
+ * @return {*} A reference to <code>value</code>.
+ * @throws {Error} If <code>value</code> is <code>null</code> or not a stookie schema.
+ * @public
+ */
+function checkSchema(value, key) {
+  if (value == null) {
+    throw new Error(`schema is required${(key ? `at "${key}"` : '')}`);
+  } else if (!value.isStookieSchema) {
+    throw new Error(`schema is invalid${(key ? `at "${key}"` : '')}`);
+  }
 
-const AnySchema = require('./schema/any-schema');
-const ArraySchema = require('./schema/array-schema');
-const ObjectSchema = require('./schema/object-schema');
-const checkSchema = require('./util/check-schema');
-
-function any() {
-  return new AnySchema();
+  return value;
 }
 
-function array() {
-  return new ArraySchema();
-}
-
-function object() {
-  return new ObjectSchema();
-}
-
-function process(value, schema, options) {
-  return checkSchema(schema).process(value, null, options);
-}
-
-module.exports = {
-  any,
-  array,
-  object,
-  process
-};
+module.exports = checkSchema;

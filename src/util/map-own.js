@@ -22,10 +22,22 @@
 
 'use strict';
 
-// TODO
-
 const forOwn = require('./for-own');
 
+/**
+ * Iterates over all of the own (not inherited) properties on the specifed <code>obj</code> and invokes the
+ * <code>callback</code> provided for each one to create a new object containing the same properties, except that their
+ * values are the return values of <code>callback</code>.
+ *
+ * An empty object will be returned and <code>callback</code> is never called if <code>obj</code> is <code>null</code>
+ * or contains no own properties.
+ *
+ * @param {?Object} obj - the object whose own properties are to be iterated over and mapped to a new object
+ * @param {mapOwn~callback} callback - the function to be called for each own property
+ * @return {Object} An object containing the same properties as <code>obj</code> but whose values are provided by
+ * <code>callback</code>.
+ * @public
+ */
 function mapOwn(obj, callback) {
   const result = {};
 
@@ -37,3 +49,15 @@ function mapOwn(obj, callback) {
 }
 
 module.exports = mapOwn;
+
+/**
+ * A function that is passed to {@link mapOwn} that is called for each own (not inherited) property on the corresponding
+ * object and is required to return the value to be mapped to that property on the new object.
+ *
+ * @callback mapOwn~callback
+ * @param {*} value - the property value
+ * @param {string} key - the property key
+ * @param {Object} obj - the object that was passed to {@link mapOwn}
+ * @return {*} The value to be mapped to the property.
+ * @public
+ */

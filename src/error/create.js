@@ -22,12 +22,28 @@
 
 'use strict';
 
-// TODO
-
 const doT = require('dot/doT');
 
+/**
+ * A cache containing templates compiled from error messages.
+ *
+ * @type {Object.<string, Function>}
+ * @private
+ */
 const templateCache = {};
 
+/**
+ * Creates an error with the specified <code>message</code> using the <code>state</code> provided.
+ *
+ * <code>message</code> is treated as a <code>doT</code> template string and is compiled and rendered with
+ * <code>state</code> being passed to the template via the <code>it</code> variable. <code>message</code> will only ever
+ * be compiled to a template once, as the template is cached for subsequent calls.
+ *
+ * @param {string} message - the message for the error to be created
+ * @param {AnySchema~State} state - the current state
+ * @return {Error} The {@link Error} using <code>message</code> and <code>state</code>.
+ * @public
+ */
 function create(message, state) {
   message = getTemplate(message)({
     key: state.key ? `"${state.key}"` : 'value',
@@ -38,6 +54,14 @@ function create(message, state) {
   return new Error(message);
 }
 
+/**
+ * Gets a previously cached <code>doT</code> template for the specified <code>message</code> or compiles and caches it
+ * if one does not already exist.
+ *
+ * @param {string} message - the message whose template is to be returned
+ * @return {Function} The compiled template for <code>message</code>.
+ * @private
+ */
 function getTemplate(message) {
   let template = templateCache[message];
   if (!template) {

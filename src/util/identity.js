@@ -22,32 +22,17 @@
 
 'use strict';
 
-// TODO
-
-const AnySchema = require('./schema/any-schema');
-const ArraySchema = require('./schema/array-schema');
-const ObjectSchema = require('./schema/object-schema');
-const checkSchema = require('./util/check-schema');
-
-function any() {
-  return new AnySchema();
+/**
+ * Returns the specified <code>value</code>.
+ *
+ * This is especially usefulf or iterator callbacks where the first argument is always to be returned.
+ *
+ * @param {*} value - the value to be returned
+ * @return {*} A reference to <code>value</code>.
+ * @public
+ */
+function identity(value) {
+  return value;
 }
 
-function array() {
-  return new ArraySchema();
-}
-
-function object() {
-  return new ObjectSchema();
-}
-
-function process(value, schema, options) {
-  return checkSchema(schema).process(value, null, options);
-}
-
-module.exports = {
-  any,
-  array,
-  object,
-  process
-};
+module.exports = identity;

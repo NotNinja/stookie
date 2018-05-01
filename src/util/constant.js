@@ -22,32 +22,15 @@
 
 'use strict';
 
-// TODO
-
-const AnySchema = require('./schema/any-schema');
-const ArraySchema = require('./schema/array-schema');
-const ObjectSchema = require('./schema/object-schema');
-const checkSchema = require('./util/check-schema');
-
-function any() {
-  return new AnySchema();
+/**
+ * Returns a function that will always return the specified <code>value</code>.
+ *
+ * @param {*} value - the value to be returned by the function
+ * @return {Function} A function which will always return <code>value</code>.
+ * @public
+ */
+function constant(value) {
+  return () => value;
 }
 
-function array() {
-  return new ArraySchema();
-}
-
-function object() {
-  return new ObjectSchema();
-}
-
-function process(value, schema, options) {
-  return checkSchema(schema).process(value, null, options);
-}
-
-module.exports = {
-  any,
-  array,
-  object,
-  process
-};
+module.exports = constant;

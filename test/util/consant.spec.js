@@ -24,30 +24,10 @@
 
 // TODO
 
-const AnySchema = require('./schema/any-schema');
-const ArraySchema = require('./schema/array-schema');
-const ObjectSchema = require('./schema/object-schema');
-const checkSchema = require('./util/check-schema');
+const assert = require('assert');
 
-function any() {
-  return new AnySchema();
-}
+const constant = require('../../src/util/constant');
 
-function array() {
-  return new ArraySchema();
-}
-
-function object() {
-  return new ObjectSchema();
-}
-
-function process(value, schema, options) {
-  return checkSchema(schema).process(value, null, options);
-}
-
-module.exports = {
-  any,
-  array,
-  object,
-  process
-};
+describe('util/constant', () => {
+  // TODO
+});

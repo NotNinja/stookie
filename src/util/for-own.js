@@ -22,10 +22,20 @@
 
 'use strict';
 
-// TODO
-
 const hasOwn = require('./has-own');
 
+/**
+ * Iterates over all of the own (not inherited) properties on the specifed <code>obj</code> and invokes the
+ * <code>callback</code> provided for each one.
+ *
+ * Nothing happens and <code>callback</code> is never called if <code>obj</code> is <code>null</code> or contains no
+ * own properties.
+ *
+ * @param {?Object} obj - the object whose own properties are to be iterated over
+ * @param {forOwn~callback} callback - the function to be called for each own property
+ * @return {void}
+ * @public
+ */
 function forOwn(obj, callback) {
   if (obj == null) {
     return;
@@ -39,3 +49,15 @@ function forOwn(obj, callback) {
 }
 
 module.exports = forOwn;
+
+/**
+ * A function that is passed to {@link forOwn} that is called for each own (not inherited) property on the corresponding
+ * object.
+ *
+ * @callback forOwn~callback
+ * @param {*} value - the property value
+ * @param {string} key - the property key
+ * @param {Object} obj - the object that was passed to {@link forOwn}
+ * @return {void}
+ * @public
+ */

@@ -26,24 +26,38 @@
 
 const AnySchema = require('./any-schema');
 const createError = require('../error/create');
+const checkSchema = require('../util/check-schema');
 const checkType = require('../util/check-type');
+const clone = require('../util/clone');
 
 class ArraySchema extends AnySchema {
 
   all(schema) {
-    this._childSchema = ArraySchema.check(schema);
+    const that = this.clone();
 
-    return this;
+    that._childSchema = checkSchema(schema);
+
+    return that;
+  }
+
+  clone() {
+    const that = super.clone();
+    that._childSchema = this._childSchema;
+    that._childrenSchemas = clone(this._childrenSchemas);
+
+    return that;
   }
 
   item(index, schema) {
-    if (!this._childrenSchemas) {
-      this._childrenSchemas = [];
+    const that = this.clone();
+
+    if (!that._childrenSchemas) {
+      that._childrenSchemas = [];
     }
 
-    this._childrenSchemas.push(ArraySchema.check(schema, index));
+    that._childrenSchemas.push(checkSchema(schema, index));
 
-    return this;
+    return that;
   }
 
   items(schemas) {
@@ -51,15 +65,17 @@ class ArraySchema extends AnySchema {
       schemas = checkType.isArray(schemas) ? schemas : [ schemas ];
     }
 
-    if (!this._childrenSchemas) {
-      this._childrenSchemas = [];
+    const that = this.clone();
+
+    if (!that._childrenSchemas) {
+      that._childrenSchemas = [];
     }
 
     schemas.forEach((schema, index) => {
-      this._childrenSchemas.push(ArraySchema.check(schema, index));
+      that._childrenSchemas.push(checkSchema(schema, index));
     });
 
-    return this;
+    return that;
   }
 
   _process(value, state, options) {

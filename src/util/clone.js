@@ -24,30 +24,19 @@
 
 // TODO
 
-const AnySchema = require('./schema/any-schema');
-const ArraySchema = require('./schema/array-schema');
-const ObjectSchema = require('./schema/object-schema');
-const checkSchema = require('./util/check-schema');
+const checkType = require('./check-type');
+const identity = require('./identity');
+const mapOwn = require('./map-own');
 
-function any() {
-  return new AnySchema();
+function clone(value) {
+  if (!checkType.isObject(value)) {
+    return value;
+  }
+  if (checkType.isArray(value)) {
+    return value.slice();
+  }
+
+  return mapOwn(value, identity);
 }
 
-function array() {
-  return new ArraySchema();
-}
-
-function object() {
-  return new ObjectSchema();
-}
-
-function process(value, schema, options) {
-  return checkSchema(schema).process(value, null, options);
-}
-
-module.exports = {
-  any,
-  array,
-  object,
-  process
-};
+module.exports = clone;

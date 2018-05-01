@@ -22,13 +22,25 @@
 
 'use strict';
 
-// TODO
-
+/**
+ * A list of type names whose <code>is*</code> methods will be added to {@link checkType} automatically and will
+ * use {@link Object#toString} output for comparisons.
+ *
+ * @type {Array.<string>}
+ * @private
+ */
 const autoTypes = [ 'Array', 'Error', 'Function', 'RegExp', 'String' ];
+
+/**
+ * Contains methods for checking whether values are various types.
+ *
+ * @type {Object.<string, Function>}
+ * @public
+ */
 const checkType = {
   isArray: Array.isArray,
   isBoolean: (value) => value === false || value === true,
-  isObject: (value) => value !== null && typeof value === 'object',
+  isObject: (value) => value !== null && (typeof value === 'function' || typeof value === 'object'),
   /* eslint-disable no-void */
   isUndefined: (value) => value === void 0
   /* eslint-enable no-void */
