@@ -49,5 +49,8 @@ module.exports = {
   any,
   array,
   object,
-  process
+  process,
+  AnySchema,
+  ArraySchema,
+  ObjectSchema
 };
