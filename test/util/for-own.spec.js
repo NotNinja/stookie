@@ -54,8 +54,8 @@ describe('util/for-own', () => {
       forOwn(value, callback);
 
       assert.equal(callback.callCount, 2, 'Invoked callback for each own property');
-      assert.ok(callback.calledWithExactly('bar', 'foo', value));
-      assert.ok(callback.calledWithExactly('baz', 'fu', value));
+      assert.ok(callback.calledWithExactly('bar', 'foo', value), 'Invoked callback for "foo" own property');
+      assert.ok(callback.calledWithExactly('baz', 'fu', value), 'Invoked callback for "fu" own property');
     });
   });
 
@@ -103,8 +103,8 @@ describe('util/for-own', () => {
       forOwn(value, callback);
 
       assert.equal(callback.callCount, 2, 'Invoked callback for each own property');
-      assert.ok(callback.calledWithExactly('bar', 'foo', value));
-      assert.ok(callback.calledWithExactly('baz', 'fu', value));
+      assert.ok(callback.calledWithExactly('bar', 'foo', value), 'Invoked callback for "foo" own property');
+      assert.ok(callback.calledWithExactly('baz', 'fu', value), 'Invoked callback for "fu" own property');
     });
   });
 
