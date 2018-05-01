@@ -22,12 +22,61 @@
 
 'use strict';
 
-// TODO
-
 const assert = require('assert');
 
+const AnySchema = require('../../src/schema/any-schema');
 const checkSchema = require('../../src/util/check-schema');
 
 describe('util/check-schema', () => {
-  // TODO
+  context('when value is schema', () => {
+    it('should return value', () => {
+      const schema = new AnySchema();
+
+      assert.strictEqual(checkSchema(schema), schema);
+    });
+
+    context('and key is specified', () => {
+      it('should return value', () => {
+        const schema = new AnySchema();
+
+        assert.strictEqual(checkSchema(schema, 'foo'), schema);
+      });
+    });
+  });
+
+  context('when value is not schema', () => {
+    it('should throw an error', () => {
+      assert.throws(
+        () => checkSchema({}),
+        (err) => err instanceof Error && err.message === 'schema is invalid'
+      );
+    });
+
+    context('and key is specified', () => {
+      it('should throw an error including key', () => {
+        assert.throws(
+          () => checkSchema({}, 'foo'),
+          (err) => err instanceof Error && err.message === 'schema is invalid at "foo"'
+        );
+      });
+    });
+  });
+
+  context('when value is null', () => {
+    it('should throw an error', () => {
+      assert.throws(
+        () => checkSchema(null),
+        (err) => err instanceof Error && err.message === 'schema is required'
+      );
+    });
+
+    context('and key is specified', () => {
+      it('should throw an error including key', () => {
+        assert.throws(
+          () => checkSchema(null, 'foo'),
+          (err) => err instanceof Error && err.message === 'schema is required at "foo"'
+        );
+      });
+    });
+  });
 });

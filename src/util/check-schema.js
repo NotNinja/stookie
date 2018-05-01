@@ -35,9 +35,9 @@
  */
 function checkSchema(value, key) {
   if (value == null) {
-    throw new Error(`schema is required${(key ? `at "${key}"` : '')}`);
+    throw new Error(`schema is required${(key ? ` at "${key}"` : '')}`);
   } else if (!value.isStookieSchema) {
-    throw new Error(`schema is invalid${(key ? `at "${key}"` : '')}`);
+    throw new Error(`schema is invalid${(key ? ` at "${key}"` : '')}`);
   }
 
   return value;
