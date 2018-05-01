@@ -41,27 +41,27 @@ describe('util/has-own', () => {
 
   context('when obj has inherited property', () => {
     it('should return false', () => {
-      assert.strictEqual(hasOwn(new TestType(), 'fu'), false);
+      assert.strictEqual(hasOwn(new TestType(), 'fu'), false, 'Returns false for inherited property');
     });
   });
 
   context('when obj has no property', () => {
     it('should return false', () => {
-      assert.strictEqual(hasOwn({ foo: 'bar' }, 'fizz'), false);
-      assert.strictEqual(hasOwn(new TestType(), 'fizz'), false);
+      assert.strictEqual(hasOwn({ foo: 'bar' }, 'fizz'), false, 'Returns false for missing property');
+      assert.strictEqual(hasOwn(new TestType(), 'fizz'), false, 'Returns false for missing property');
     });
   });
 
   context('when obj has own property', () => {
     it('should return true', () => {
-      assert.strictEqual(hasOwn({ foo: 'bar' }, 'foo'), true);
-      assert.strictEqual(hasOwn(new TestType(), 'foo'), true);
+      assert.strictEqual(hasOwn({ foo: 'bar' }, 'foo'), true, 'Returns true for own property');
+      assert.strictEqual(hasOwn(new TestType(), 'foo'), true, 'Returns true for own property');
     });
   });
 
   context('when obj is null', () => {
     it('should return false', () => {
-      assert.strictEqual(hasOwn(null, ''), false);
+      assert.strictEqual(hasOwn(null, ''), false, 'Returns false for null obj');
     });
   });
 });
