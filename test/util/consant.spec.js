@@ -22,12 +22,25 @@
 
 'use strict';
 
-// TODO
-
 const assert = require('assert');
 
 const constant = require('../../src/util/constant');
 
 describe('util/constant', () => {
-  // TODO
+  const testValues = [
+    null,
+    123,
+    'foo',
+    { foo: 'bar' },
+    [ 'foo', 'bar' ]
+  ];
+
+  it('should return function that always returns value', () => {
+    testValues.forEach((value, index) => {
+      const fn = constant(value);
+
+      assert.equal(typeof fn, 'function', `Returns function for value at index: ${index}`);
+      assert.strictEqual(fn(), value, `Function returns value for value at index: ${index}`);
+    });
+  });
 });

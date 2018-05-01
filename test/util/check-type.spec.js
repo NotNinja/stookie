@@ -29,22 +29,22 @@ const assert = require('assert');
 const checkType = require('../../src/util/check-type');
 
 describe('util/check-type', () => {
-  function describeCheckTypeMethod(methodName, type, pass, fail) {
+  function describeCheckTypeMethod(methodName, type, passValues, failValues) {
     const method = checkType[methodName];
 
     describe(`.${methodName}`, () => {
       context(`when value is ${type}`, () => {
         it('should return true', () => {
-          pass.forEach((value, index) => {
-            assert.strictEqual(method(value), true, `true for value at index: ${index}`);
+          passValues.forEach((value, index) => {
+            assert.strictEqual(method(value), true, `Returns true for value at index: ${index}`);
           });
         });
       });
 
       context(`when value is not ${type}`, () => {
         it('should return false', () => {
-          fail.forEach((value, index) => {
-            assert.strictEqual(method(value), false, `false for value at index: ${index}`);
+          failValues.forEach((value, index) => {
+            assert.strictEqual(method(value), false, `Returns false for value at index: ${index}`);
           });
         });
       });
