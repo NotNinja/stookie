@@ -22,12 +22,46 @@
 
 'use strict';
 
-// TODO
-
 const assert = require('assert');
 
 const hasOwn = require('../../src/util/has-own');
 
 describe('util/has-own', () => {
-  // TODO
+  class TestType {
+
+    constructor() {
+      this.foo = 'bar';
+    }
+
+    get fu() {
+      return 'baz';
+    }
+
+  }
+
+  context('when obj has inherited property', () => {
+    it('should return false', () => {
+      assert.strictEqual(hasOwn(new TestType(), 'fu'), false);
+    });
+  });
+
+  context('when obj has no property', () => {
+    it('should return false', () => {
+      assert.strictEqual(hasOwn({ foo: 'bar' }, 'fizz'), false);
+      assert.strictEqual(hasOwn(new TestType(), 'fizz'), false);
+    });
+  });
+
+  context('when obj has own property', () => {
+    it('should return true', () => {
+      assert.strictEqual(hasOwn({ foo: 'bar' }, 'foo'), true);
+      assert.strictEqual(hasOwn(new TestType(), 'foo'), true);
+    });
+  });
+
+  context('when obj is null', () => {
+    it('should return false', () => {
+      assert.strictEqual(hasOwn(null, ''), false);
+    });
+  });
 });
