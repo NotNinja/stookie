@@ -32,7 +32,7 @@ function create(message, state) {
   message = getTemplate(message)({
     key: state.key ? `"${state.key}"` : 'value',
     parent: state.parent,
-    path: state.path.join('.')
+    path: state.path.slice()
   });
 
   return new Error(message);
