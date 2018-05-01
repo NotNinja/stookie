@@ -22,12 +22,97 @@
 
 'use strict';
 
-// TODO
-
 const assert = require('assert');
+const sinon = require('sinon');
 
 const forOwn = require('../../src/util/for-own');
 
 describe('util/for-own', () => {
-  // TODO
+  let callback;
+
+  beforeEach(() => {
+    callback = sinon.spy();
+  });
+
+  context('when obj has inherited and own properties', () => {
+    it('should only invoke callback for each own property', () => {
+      class TestType {
+
+        constructor() {
+          this.foo = 'bar';
+          this.fu = 'baz';
+        }
+
+        get fizz() {
+          return 'buzz';
+        }
+
+      }
+
+      const value = new TestType();
+
+      forOwn(value, callback);
+
+      assert.equal(callback.callCount, 2, 'Invoked callback for each own property');
+      assert.ok(callback.calledWithExactly('bar', 'foo', value));
+      assert.ok(callback.calledWithExactly('baz', 'fu', value));
+    });
+  });
+
+  context('when obj has no properties', () => {
+    it('should never invoke callback', () => {
+      forOwn({}, callback);
+
+      assert.equal(callback.callCount, 0, 'Never invoked callback');
+    });
+  });
+
+  context('when obj has only inherited properties', () => {
+    it('should never invoke callback', () => {
+      class TestType {
+
+        get foo() {
+          return 'bar';
+        }
+
+        get fu() {
+          return 'baz';
+        }
+
+      }
+
+      forOwn(new TestType(), callback);
+
+      assert.equal(callback.callCount, 0, 'Never invoked callback');
+    });
+  });
+
+  context('when obj has only own properties', () => {
+    it('should invoke callback for each own property', () => {
+      class TestType {
+
+        constructor() {
+          this.foo = 'bar';
+          this.fu = 'baz';
+        }
+
+      }
+
+      const value = new TestType();
+
+      forOwn(value, callback);
+
+      assert.equal(callback.callCount, 2, 'Invoked callback for each own property');
+      assert.ok(callback.calledWithExactly('bar', 'foo', value));
+      assert.ok(callback.calledWithExactly('baz', 'fu', value));
+    });
+  });
+
+  context('when obj is null', () => {
+    it('should never invoke callback', () => {
+      forOwn(null, callback);
+
+      assert.equal(callback.callCount, 0, 'Never invoked callback');
+    });
+  });
 });
