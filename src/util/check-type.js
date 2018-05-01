@@ -32,6 +32,14 @@
 const autoTypes = [ 'Array', 'Error', 'Function', 'RegExp', 'String' ];
 
 /**
+ * A shorthand reference to {@link Object#toString}.
+ *
+ * @type {Function}
+ * @private
+ */
+const objectToString = Object.prototype.toString;
+
+/**
  * Contains methods for checking whether values are various types.
  *
  * @type {Object.<string, Function>}
@@ -39,8 +47,8 @@ const autoTypes = [ 'Array', 'Error', 'Function', 'RegExp', 'String' ];
  */
 const checkType = {
   isArray: Array.isArray,
-  isBoolean: (value) => value === false || value === true,
-  isObject: (value) => value !== null && (typeof value === 'function' || typeof value === 'object'),
+  isBoolean: (value) => value === false || value === true || objectToString.call(value) === '[object Boolean]',
+  isObject: (value) => value !== null && typeof value === 'object',
   /* eslint-disable no-void */
   isUndefined: (value) => value === void 0
   /* eslint-enable no-void */
@@ -50,7 +58,7 @@ autoTypes.forEach((name) => {
   const methodName = `is${name}`;
 
   if (!checkType[methodName]) {
-    checkType[methodName] = (value) => Object.prototype.toString.call(value) === `[object ${name}]`;
+    checkType[methodName] = (value) => objectToString.call(value) === `[object ${name}]`;
   }
 });
 

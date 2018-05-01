@@ -22,12 +22,232 @@
 
 'use strict';
 
-// TODO
+/* eslint-disable no-array-constructor, no-new-func, no-new-object, no-new-wrappers, no-void */
 
 const assert = require('assert');
 
 const checkType = require('../../src/util/check-type');
 
 describe('util/check-type', () => {
-  // TODO
+  function describeCheckTypeMethod(methodName, type, pass, fail) {
+    const method = checkType[methodName];
+
+    describe(`.${methodName}`, () => {
+      context(`when value is ${type}`, () => {
+        it('should return true', () => {
+          pass.forEach((value, index) => {
+            assert.strictEqual(method(value), true, `true for value at index: ${index}`);
+          });
+        });
+      });
+
+      context(`when value is not ${type}`, () => {
+        it('should return false', () => {
+          fail.forEach((value, index) => {
+            assert.strictEqual(method(value), false, `false for value at index: ${index}`);
+          });
+        });
+      });
+    });
+  }
+
+  describeCheckTypeMethod(
+    'isArray',
+    'array',
+    [
+      [ 'foo', 'bar' ],
+      new Array()
+    ],
+    [
+      null,
+      void 0,
+      true,
+      function() {},
+      {},
+      /foo/,
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date(),
+      new Error()
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isBoolean',
+    'boolean',
+    [
+      false,
+      true,
+      new Boolean(0),
+      new Boolean(1)
+    ],
+    [
+      null,
+      void 0,
+      function() {},
+      {},
+      [],
+      /foo/,
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date(),
+      new Error()
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isError',
+    'error',
+    [
+      new Error(),
+      new TypeError()
+    ],
+    [
+      null,
+      void 0,
+      true,
+      function() {},
+      {},
+      [],
+      /foo/,
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date()
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isFunction',
+    'function',
+    [
+      function() {},
+      () => {},
+      new Function(),
+      class {}
+    ],
+    [
+      null,
+      void 0,
+      true,
+      {},
+      [],
+      /foo/,
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date(),
+      new Error()
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isObject',
+    'object',
+    [
+      {},
+      { foo: 'bar' },
+      Object.create({ fu: 'baz' }),
+      new Object(),
+      new class {}(),
+      [],
+      new Array(),
+      new Error(),
+      /fizz/,
+      new Date()
+    ],
+    [
+      null,
+      void 0,
+      true,
+      function() {},
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo')
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isRegExp',
+    'regular expression',
+    [
+      /foo/,
+      new RegExp('bar')
+    ],
+    [
+      null,
+      void 0,
+      true,
+      function() {},
+      {},
+      [],
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date(),
+      new Error()
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isString',
+    'string',
+    [
+      'foo',
+      new String('bar'),
+      `fu ${'baz'}`
+    ],
+    [
+      null,
+      void 0,
+      true,
+      function() {},
+      {},
+      [],
+      /foo/,
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date(),
+      new Error()
+    ]
+  );
+
+  describeCheckTypeMethod(
+    'isUndefined',
+    'undefined',
+    [
+      void 0
+    ],
+    [
+      null,
+      true,
+      function() {},
+      {},
+      [],
+      /foo/,
+      'foo',
+      123,
+      Infinity,
+      NaN,
+      Symbol('foo'),
+      new Date(),
+      new Error()
+    ]
+  );
 });
