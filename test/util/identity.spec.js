@@ -22,12 +22,22 @@
 
 'use strict';
 
-// TODO
-
 const assert = require('assert');
 
 const identity = require('../../src/util/identity');
 
 describe('util/identity', () => {
-  // TODO
+  const testValues = [
+    null,
+    123,
+    'foo',
+    { foo: 'bar' },
+    [ 'foo', 'bar' ]
+  ];
+
+  it('should return value', () => {
+    testValues.forEach((value, index) => {
+      assert.strictEqual(identity(value), value, `Returns value for value at index: ${index}`);
+    });
+  });
 });
