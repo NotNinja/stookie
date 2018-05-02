@@ -22,12 +22,72 @@
 
 'use strict';
 
-// TODO
+/* eslint-disable no-void */
 
 const assert = require('assert');
 
 const clone = require('../../src/util/clone');
 
 describe('util/clone', () => {
-  // TODO
+  context('when value is array', () => {
+    it('should return shallow copy of elements within array', () => {
+      const value = [
+        123,
+        'foo',
+        { fu: 'baz' }
+      ];
+
+      const result = clone(value);
+
+      assert.notStrictEqual(result, value, 'Does not return value');
+      assert.deepStrictEqual(result, value, 'Returns copy of value');
+      assert.strictEqual(result[2], value[2], 'Copy is shallow');
+    });
+  });
+
+  context('when value is not array or object', () => {
+    const testValues = [
+      null,
+      void 0,
+      true,
+      function() {},
+      'foo',
+      123,
+      Symbol('foo')
+    ];
+
+    it('should return value', () => {
+      testValues.forEach((value, index) => {
+        assert.strictEqual(clone(value), value, `Returns value for value at index: ${index}`);
+      });
+    });
+  });
+
+  context('when value is object', () => {
+    it('should return shallow copy of own properties within object', () => {
+      class TestType {
+
+        constructor() {
+          this.foo = 'bar';
+          this.fu = { bazz: true };
+        }
+
+        get fizz() {
+          return 'buzz';
+        }
+
+      }
+
+      const value = new TestType();
+
+      const result = clone(value);
+
+      assert.notStrictEqual(result, value, 'Does not return value');
+      assert.deepStrictEqual(result, {
+        foo: value.foo,
+        fu: value.fu
+      }, 'Returns copy of value');
+      assert.strictEqual(result.fu, value.fu, 'Copy is shallow');
+    });
+  });
 });

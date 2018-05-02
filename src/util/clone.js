@@ -22,12 +22,20 @@
 
 'use strict';
 
-// TODO
-
 const checkType = require('./check-type');
 const identity = require('./identity');
 const mapOwn = require('./map-own');
 
+/**
+ * Returns a clone of <code>value</code>.
+ *
+ * The clone operation is very basic and simply performs a shallow copy for elements within arrrays and own properties
+ * within objects while returning <code>value</code> for any other types.
+ *
+ * @param {*} value - the value to be cloned
+ * @return {*} A clone of <code>value</code> or <code>value</code> if its type could not be cloned.
+ * @public
+ */
 function clone(value) {
   if (!checkType.isObject(value)) {
     return value;
