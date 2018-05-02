@@ -27,35 +27,34 @@ const assert = require('assert');
 const hasOwn = require('../../src/util/has-own');
 
 describe('util/has-own', () => {
-  class TestType {
+  let TestType;
+  let testValue;
 
-    constructor() {
-      this.foo = 'bar';
-    }
+  before(() => {
+    TestType = function() {};
+    TestType.prototype.fu = 'baz';
 
-    get fu() {
-      return 'baz';
-    }
-
-  }
+    testValue = new TestType();
+    testValue.foo = 'bar';
+  });
 
   context('when obj has inherited property', () => {
     it('should return false', () => {
-      assert.strictEqual(hasOwn(new TestType(), 'fu'), false, 'Returns false for inherited property');
+      assert.strictEqual(hasOwn(testValue, 'fu'), false, 'Returns false for inherited property');
     });
   });
 
   context('when obj has no property', () => {
     it('should return false', () => {
       assert.strictEqual(hasOwn({ foo: 'bar' }, 'fizz'), false, 'Returns false for missing property');
-      assert.strictEqual(hasOwn(new TestType(), 'fizz'), false, 'Returns false for missing property');
+      assert.strictEqual(hasOwn(testValue, 'fizz'), false, 'Returns false for missing property');
     });
   });
 
   context('when obj has own property', () => {
     it('should return true', () => {
       assert.strictEqual(hasOwn({ foo: 'bar' }, 'foo'), true, 'Returns true for own property');
-      assert.strictEqual(hasOwn(new TestType(), 'foo'), true, 'Returns true for own property');
+      assert.strictEqual(hasOwn(testValue, 'foo'), true, 'Returns true for own property');
     });
   });
 

@@ -65,20 +65,12 @@ describe('util/clone', () => {
 
   context('when value is object', () => {
     it('should return shallow copy of own properties within object', () => {
-      class TestType {
-
-        constructor() {
-          this.foo = 'bar';
-          this.fu = { bazz: true };
-        }
-
-        get fizz() {
-          return 'buzz';
-        }
-
-      }
+      function TestType() {}
+      TestType.prototype.fizz = 'buzz';
 
       const value = new TestType();
+      value.foo = 'bar';
+      value.fu = { bazz: true };
 
       const result = clone(value);
 

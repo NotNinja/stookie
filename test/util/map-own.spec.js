@@ -36,20 +36,12 @@ describe('util/map-own', () => {
 
   context('when obj has inherited and own properties', () => {
     it('should only invoke callback and map each own property', () => {
-      class TestType {
-
-        constructor() {
-          this.foo = 'bar';
-          this.fu = 'baz';
-        }
-
-        get fizz() {
-          return 'buzz';
-        }
-
-      }
+      function TestType() {}
+      TestType.prototype.fizz = 'buzz';
 
       const value = new TestType();
+      value.foo = 'bar';
+      value.fu = 'baz';
 
       const result = mapOwn(value, callback);
 
@@ -76,19 +68,13 @@ describe('util/map-own', () => {
 
   context('when obj has only inherited properties', () => {
     it('should never invoke callback and return empty object', () => {
-      class TestType {
+      function TestType() {}
+      TestType.prototype.foo = 'bar';
+      TestType.prototype.fu = 'baz';
 
-        get foo() {
-          return 'bar';
-        }
+      const value = new TestType();
 
-        get fu() {
-          return 'baz';
-        }
-
-      }
-
-      const result = mapOwn(new TestType(), callback);
+      const result = mapOwn(value, callback);
 
       assert.deepEqual(result, {}, 'Returns empty object');
 
@@ -98,16 +84,11 @@ describe('util/map-own', () => {
 
   context('when obj has only own properties', () => {
     it('should invoke callback and map each own property', () => {
-      class TestType {
-
-        constructor() {
-          this.foo = 'bar';
-          this.fu = 'baz';
-        }
-
-      }
+      function TestType() {}
 
       const value = new TestType();
+      value.foo = 'bar';
+      value.fu = 'baz';
 
       const result = mapOwn(value, callback);
 

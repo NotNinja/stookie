@@ -36,20 +36,12 @@ describe('util/for-own', () => {
 
   context('when obj has inherited and own properties', () => {
     it('should only invoke callback for each own property', () => {
-      class TestType {
-
-        constructor() {
-          this.foo = 'bar';
-          this.fu = 'baz';
-        }
-
-        get fizz() {
-          return 'buzz';
-        }
-
-      }
+      function TestType() {}
+      TestType.prototype.fizz = 'buzz';
 
       const value = new TestType();
+      value.foo = 'bar';
+      value.fu = 'baz';
 
       forOwn(value, callback);
 
@@ -69,19 +61,13 @@ describe('util/for-own', () => {
 
   context('when obj has only inherited properties', () => {
     it('should never invoke callback', () => {
-      class TestType {
+      function TestType() {}
+      TestType.prototype.foo = 'bar';
+      TestType.prototype.fu = 'baz';
 
-        get foo() {
-          return 'bar';
-        }
+      const value = new TestType();
 
-        get fu() {
-          return 'baz';
-        }
-
-      }
-
-      forOwn(new TestType(), callback);
+      forOwn(value, callback);
 
       assert.equal(callback.callCount, 0, 'Never invoked callback');
     });
@@ -89,16 +75,11 @@ describe('util/for-own', () => {
 
   context('when obj has only own properties', () => {
     it('should invoke callback for each own property', () => {
-      class TestType {
-
-        constructor() {
-          this.foo = 'bar';
-          this.fu = 'baz';
-        }
-
-      }
+      function TestType() {}
 
       const value = new TestType();
+      value.foo = 'bar';
+      value.fu = 'baz';
 
       forOwn(value, callback);
 
