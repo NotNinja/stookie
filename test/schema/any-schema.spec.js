@@ -24,10 +24,6 @@
 
 // TODO
 
-const assert = require('assert');
-
-const AnySchema = require('../../src/schema/any-schema');
-
 describe('schema/any-schema', () => {
   // TODO
 });

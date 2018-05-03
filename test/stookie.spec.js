@@ -24,10 +24,6 @@
 
 // TODO
 
-const assert = require('assert');
-
-const stookie = require('../src/stookie');
-
 describe('stookie', () => {
   // TODO
 });

@@ -22,8 +22,6 @@
 
 'use strict';
 
-/* eslint-disable no-array-constructor, no-new-func, no-new-object, no-new-wrappers, no-void */
-
 const assert = require('assert');
 
 const checkType = require('../../src/util/check-type');

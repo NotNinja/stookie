@@ -22,8 +22,6 @@
 
 'use strict';
 
-/* eslint-disable no-void */
-
 const assert = require('assert');
 
 const clone = require('../../src/util/clone');

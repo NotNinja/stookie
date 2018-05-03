@@ -24,10 +24,6 @@
 
 // TODO
 
-const assert = require('assert');
-
-const ArraySchema = require('../../src/schema/array-schema');
-
 describe('schema/array-schema', () => {
   // TODO
 });

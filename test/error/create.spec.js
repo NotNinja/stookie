@@ -24,10 +24,6 @@
 
 // TODO
 
-const assert = require('assert');
-
-const create = require('../../src/error/create');
-
 describe('error/create', () => {
   // TODO
 });

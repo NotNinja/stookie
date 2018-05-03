@@ -114,9 +114,7 @@ class ObjectSchema extends AnySchema {
         return;
       }
 
-      /* eslint-disable no-void */
       const prop = void 0;
-      /* eslint-enable no-void */
       const schema = this._childrenSchemas[key];
 
       value[key] = schema.process(prop, {

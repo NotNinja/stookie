@@ -113,9 +113,7 @@ class ArraySchema extends AnySchema {
 
     // TODO: Test thoroughly
     for (let i = childrenSchemasIndex; i < childrenSchemasLength; i++) {
-      /* eslint-disable no-void */
       const item = void 0;
-      /* eslint-enable no-void */
       const key = String(i);
       const schema = this._childrenSchemas[i];
 

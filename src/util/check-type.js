@@ -49,9 +49,7 @@ const checkType = {
   isArray: Array.isArray,
   isBoolean: (value) => value === false || value === true || objectToString.call(value) === '[object Boolean]',
   isObject: (value) => value !== null && typeof value === 'object',
-  /* eslint-disable no-void */
   isUndefined: (value) => value === void 0
-  /* eslint-enable no-void */
 };
 
 autoTypes.forEach((name) => {
